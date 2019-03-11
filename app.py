@@ -16,11 +16,11 @@ import flask
 import pandas as pd
 import numpy as np
 
-#%% COnnect to Post GRE Database 
+#%% Connect to Post GRE Database 
 
-conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5432")
-print ("Opened database successfully")
-df = pd.read_sql_query('select * from "Test1_1";', conn)
+#conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5432")
+#print ("Opened database successfully")
+#df = pd.read_sql_query('select * from "Test1_1";', conn)
 
 #%% Set Up Layout 
    
@@ -32,7 +32,7 @@ server = app.server
 
 
 app.layout = html.Div([
-    html.H2('Hello World'),
+    html.H2('Hello World TEST'),
     dcc.Dropdown(
         id='dropdown',
         options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
@@ -51,3 +51,6 @@ def display_value(value):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
+#%%
