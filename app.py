@@ -16,10 +16,13 @@ import flask
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
-
+import os
 #%% Connect to Post GRE Database 
 
-conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5432")
+#DATABASE_URL = os.environ['postgres://lkpxoehyppdlkg:4c57385d135e2c2f756696fa7961f0704c7f98a427f9d14b34769d4c14c489a3@ec2']
+#conn = pg.connect(DATABASE_URL, sslmode='require')
+
+conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
 df = pd.read_sql_query('select * from "Test1_1";', conn)
 
