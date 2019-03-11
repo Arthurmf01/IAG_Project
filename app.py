@@ -6,15 +6,6 @@ import dash_html_components as html
 import psycopg2 as pg
 import pandas as pd 
 import pandas.io.sql as psql
-import dash
-from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table_experiments as dt
-import plotly
-import flask
-import pandas as pd
-import numpy as np
 
 #%% Connect to Post GRE Database 
 
