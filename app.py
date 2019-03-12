@@ -20,7 +20,7 @@ import os
 #%% Connect to Post GRE Database 
 
 DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
-conn = pg.connect(DATABASE_URL, sslmode='require')
+conn = pg.connect(DATABASE_URL)
 
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
