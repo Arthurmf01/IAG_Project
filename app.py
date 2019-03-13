@@ -19,7 +19,7 @@ import plotly.graph_objs as go
 import os
 #%% Connect to Post GRE Database 
 
-DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
+#DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
 conn = pg.connect("postgres://lkpxoehyppdlkg:4c57385d135e2c2f756696fa7961f0704c7f98a427f9d14b34769d4c14c489a3@ec2-50-19-109-120.compute-1.amazonaws.com:5432/ddhkm4dbju3lrk")
 
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
