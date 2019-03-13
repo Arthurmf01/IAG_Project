@@ -24,7 +24,8 @@ conn = pg.connect("postgres://lkpxoehyppdlkg:4c57385d135e2c2f756696fa7961f0704c7
 
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 #print ("Opened database successfully")
-df = pd.read_sql_query('select * from "Test1_1";', conn)
+
+df = pd.read_sql_query('select * from "Test1";', conn)
 
 def generate_table(dataframe, max_rows=10):
     return html.Table(
