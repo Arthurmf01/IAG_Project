@@ -32,7 +32,13 @@ conn = pg.connect("postgres://tydzgthbfkifxy:58678ccbab767710674d5f5864118633bdc
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
 
-df = pd.read_sql_query('select * from "Test1" limit 10;', conn)
+df = pd.read_sql_query('select * from "Test1" limit 20;', conn)
+
+
+#Reading Data from the database : return a  toble (key,value)
+
+
+
 
 def generate_table(dataframe, max_rows=10):
     return html.Table(
@@ -44,6 +50,8 @@ def generate_table(dataframe, max_rows=10):
             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))]
     )
+
+
 
 #%% Set Up Layout 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -72,7 +80,7 @@ app.layout = html.Div(
                 id="tabs",
                 style={"height":"20","verticalAlign":"middle"},
                 children=[
-                    dcc.Tab(label="CEO's view", value="opportunities_tab"),
+                    dcc.Tab(label="Opportunities", value="opportunities_tab"),
                     dcc.Tab(label="Manager's view", value="leads_tab"),
                     dcc.Tab(id="cases_tab",label="IT's views", value="cases_tab"),
                 ],
@@ -92,7 +100,26 @@ app.layout = html.Div(
 
 
         # Tab content
-        html.Div(id="tab_content", className="row", style={"margin": "2% 3%"}),
+        html.Div(children=[
+            html.Iframe(
+            src = "//plot.ly/~arthur_mf/75.embed",
+            style={"width":"500","height":"500","frameborder":"0"})
+            ,
+            html.Div(generate_table(df), style={
+                "margin-top": "5px",
+                "max-height": "350px",
+                "overflow-y": "scroll",
+                "padding": "8px",
+                "background-color": "white",
+                "border": "1px solid rgb(200, 212, 227)",
+                "border-radius": "3px",
+                },
+            ),            
+        ],
+        
+        
+        
+        id="tab_content", className="row", style={"margin": "2% 3%"}),
         
         html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",rel="stylesheet"),
         html.Link(href="https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css",rel="stylesheet"),
