@@ -100,26 +100,19 @@ app.layout = html.Div(
 
 
         # Tab content
-        html.Div(children=[
+        html.Div(
+            children=[
             html.Iframe(
             src = "//plot.ly/~arthur_mf/75.embed",
-            style={"width":"500","height":"500","frameborder":"0"})
-            ,
-            html.Div(generate_table(df), style={
-                "margin-top": "5px",
-                "max-height": "350px",
-                "overflow-y": "scroll",
-                "padding": "8px",
-                "background-color": "white",
-                "border": "1px solid rgb(200, 212, 227)",
-                "border-radius": "3px",
-                },
-            ),            
-        ],
-        
-        
-        
-        id="tab_content", className="row", style={"margin": "2% 3%"}),
+            style={"width":"500","height":"500","frameborder":"0"}),
+            html.Iframe(
+            src= "//plot.ly/~arthur_mf/77.embed",
+            style={"width":"500", "height":"500","frameborder":"0", "scrolling":"no"}),
+            html.Div(generate_table(df), 
+            style={"margin-top": "5px","max-height": "350px","overflow-y": "scroll","padding": "8px","background-color": "white","border": "1px solid rgb(200, 212, 227)","border-radius": "3px",},
+            ), 
+        ],     
+        id="tab_content", className="row", style={"margin": "2% 3%","margin-left":"0.5%"}),
         
         html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",rel="stylesheet"),
         html.Link(href="https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css",rel="stylesheet"),
