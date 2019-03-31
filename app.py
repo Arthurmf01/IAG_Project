@@ -33,14 +33,14 @@ conn = pg.connect("postgres://tydzgthbfkifxy:58678ccbab767710674d5f5864118633bdc
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
 
-df = pd.read_sql_query('select * from "Critical_Service_Availability2" limit 1000;', conn)
+#df = pd.read_sql_query('select * from "Critical_Service_Availability2" limit 1000;', conn)
 
 dff=pd.read_sql_query('select * from "Critical_Service_Availability2";', conn)
 dff['year'] = pd.DatetimeIndex(dff['Date_raised']).year
 dff['month'] = pd.DatetimeIndex(dff['Date_raised']).month
 
 
-df = pd.read_sql_query('select "Incident_ID","Priority","CI_Name","Domain", "Service" from "Critical_Service_Availability2";', conn)
+df = pd.read_sql_query('select "Incident_ID","Description","Date_Start","Priority","MTTR", "CI_Name","Assigned_Group", "Service" from "Critical_Service_Availability2";', conn)
 servAvail_df = pd.read_sql_query('select * from "ServAvailJF_1";', conn)
 
 #%%
@@ -55,7 +55,28 @@ def indicator(color, text, id_value):
             ),
             html.P(
                 id = id_value,
-                className="indicator_value"
+                className="indicator_value",
+                style= {"color":"#CE3030","font-size": "25px"}
+            ),
+        ],
+        className="four columns indicator",
+        
+    )
+
+#Best indicator 
+
+def indicator2(color, text, id_value):
+    return html.Div(
+        [
+            
+            html.P(
+                text,
+                className="twelve columns indicator_text"
+            ),
+            html.P(
+                id = id_value,
+                className="indicator_value",
+                style= {"color":"#1CBA27","font-size": "25px"}
             ),
         ],
         className="four columns indicator",
@@ -63,7 +84,6 @@ def indicator(color, text, id_value):
     )
 
 #Reading Data from the database : return a  toble (key,value)
-
 def generate_table(dataframe, max_rows=10):
     return html.Table(
         # Header
@@ -72,7 +92,9 @@ def generate_table(dataframe, max_rows=10):
         # Body
         [html.Tr([
             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-        ]) for i in range(min(len(dataframe), max_rows))])
+        ]) for i in range(min(len(dataframe), max_rows))]
+    )
+
 #%% Set Up Layout 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -109,8 +131,8 @@ app.layout = html.Div(
                 id="tabs",
                 style={"height":"20","verticalAlign":"middle"},
                 children=[
-                    dcc.Tab(label="Critical Incident per Month", value="opportunities_tab"),
-                    dcc.Tab(label="Critical Incident per Month", value="leads_tab"),
+                    dcc.Tab(label="Overview performance", value="opportunities_tab"),
+                    dcc.Tab(label="Performance of Critical Services per Month", value="leads_tab"),
                     dcc.Tab(id="cases_tab",label="Critical Incident per Service", value="cases_tab"),
                 ],
                 value="leads_tab",
@@ -132,7 +154,9 @@ app.layout = html.Div(
         html.Link(href="https://cdn.rawgit.com/amadoukane96/8a8cfdac5d2cecad866952c52a70a50e/raw/cd5a9bf0b30856f4fc7e3812162c74bfc0ebe011/dash_crm.css", rel="stylesheet")
     ],
     className="row",
-    style={"margin": "0%"},
+    style={"margin": "0%",
+         "height": "150%",
+    },
 )
 
 
@@ -172,37 +196,113 @@ app.layout = html.Div(
 @app.callback(
     Output("middle_leads_indicator", "children"), [Input('Month', 'value')]
 )
-def middle_leads_indicator_callback(ci_name):
-    print(ci_name)
+def middle_leads_indicator_callback(input):
+    #print(input)
     #df = pd.read_json(df, orient="split")
-    if ci_name == "All_Months":
-        open_leads = len(
-        dff[
-            (dff["Priority"] == "Critical")
-        ].index
-    )
-    else:
-        open_leads = len(
-        dff[
-            (dff["Month "] == ci_name)
-        ].index
-    )
-    
-    return open_leads
+    if input == "All_Months":
+       worst_service = '.COM - 99.1%'
+    if input == "January":
+        worst_service = 'Flight - 99.36%'
+    if input == "February":
+        worst_service = 'MAD HUB - 99.3%'
+    return worst_service
 
+@app.callback(
+    Output("middle_leads_indicator2", "children"), [Input('Month', 'value')]
+)
+def middle_leads_indicator_callback(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = 'Ticketing - 99.97%'
+    if input == "January":
+        worst_service = 'Ticketing - 99.98%'
+    if input == "February":
+        worst_service = 'Flight Dispatching - 99.98%'
+    return worst_service
+
+
+
+
+@app.callback(
+    Output("left_leads_indicator", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '.COM - 5,5 DAYS'
+    if input == "January":
+        worst_service = '.COM - 5 DAYS'
+    if input == "February":
+        worst_service = '.COM - 6 DAYS'
+    return worst_service
+
+
+@app.callback(
+    Output("left_leads_indicator2", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = 'Flight Dispatching - 30 DAYS'
+    if input == "January":
+        worst_service = 'Flight Dispatching - 30 DAYS'
+    if input == "February":
+        worst_service = 'Flight Dispatching - 30 DAYS'
+    return worst_service
+
+@app.callback(
+    Output("right_leads_indicator", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = 'Flight Tracking - 296 MIN'
+    if input == "January":
+        worst_service = 'Flight Tracking - 430 MIN'
+    if input == "February":
+        worst_service = 'Crew Mng - 300 MIN'
+    return worst_service
+
+@app.callback(
+    Output("right_leads_indicator2", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = 'Flight Dispatching - 162 MIN'
+    if input == "January":
+        worst_service = 'Flight Dispatching - 97 MIN'
+    if input == "February":
+        worst_service = 'Flight Tracking - 161 MIN'
+    return worst_service
 #Callbacks for Application
+# @app.callback(
+#     dash.dependencies.Output('table', 'children'),
+#     [dash.dependencies.Input('dropdown-1', 'value')])
+# def update_graph(ci_name):
+#     if dropdown-1 == ".COM":
+#     a = df_plot.loc[df_plot["Service"] == ci_name]
+#     return generate_table(a)
+
 @app.callback(
     dash.dependencies.Output('table', 'children'),
-    [dash.dependencies.Input('Month', 'value')])
+    [dash.dependencies.Input('Service', 'value')])
 def update_graph(ci_name):
-    if ci_name == "All_Months":
-        a= df_plot = df.copy()
+    print(ci_name)
+    if ci_name == "All Applications":
+        df_plot = df.copy()
     else:
-        df_plot = df[df["Month "] == ci_name]
+        df_plot = df[df['Service'] == ci_name]
 
-    a = df_plot.loc[df_plot["Month "] == ci_name]
+    a = df_plot.loc[df_plot["Service"] == ci_name]
 
     return generate_table(a)
+
 
 @app.callback(Output('tabs-content-example', 'children'),
               [Input('tabs', 'value')])
@@ -213,19 +313,6 @@ def render_content(tab):
             [
                 html.Div(
                     [
-                # html.Div(
-                #         #Dropdown Application
-                #         dcc.Dropdown(
-                #                         id="CI_Name",
-                #                         options=[
-                #                             {'label': i,'value': i} for i in mgr_options
-                #                             ],
-                #                         value='All Applications',
-                #                         placeholder="Select an Applications",
-                #                     ),
-                #             className="two columns",
-                # ), 
-                        #Dropdown Day (Month only) 
                 html.Div(
                         dcc.Dropdown(
                                         id="Month",
@@ -233,15 +320,11 @@ def render_content(tab):
                                             {"label": "All Months", "value": "All_Months"},
                                             {"label": "January", "value": "January"},
                                             {"label": "February", "value": "February"},
-                                            {"label": "March", "value": "March"},
-                                            {"label": "April", "value": "April"},
-                                            {"label": "June", "value": "June"},
+                                            # {"label": "March", "value": "March"},
+                                            # {"label": "April", "value": "April"},
+                                            # {"label": "June", "value": "June"},
                                         ],
-                                        
-                                        # [
-                                        #     {'label': i,'value': i} for i in mgr_options2
-                                        #     ],
-                                        placeholder="Select a Month",
+                                        value='All_Months',
                                     ),
                         dcc.Dropdown(
                                         id='dropdown-1',
@@ -277,15 +360,32 @@ def render_content(tab):
             html.Div(
                     [
                         indicator(
-                            "#00cc96", "Average level of Availability on the given period:", "left_leads_indicator"
+                            "#00cc96", "Worst Service (Number of Days between 2 failures):", "left_leads_indicator"
                         ),
                         indicator(
-                            "#119DFF", "Total number of Critical Incident on the given period:", "middle_leads_indicator"
+                            "#119DFF", "Availability - Worst Service:", "middle_leads_indicator"
                         ),
                         indicator(
                             "#EF553B",
-                            "Worst Performing services:",
+                            "Worst Service (Average time to repair per month):",
                             "right_leads_indicator",
+                        ),
+                    ],
+                    className="row",
+                    style={"marginTop": "10"}
+                ),
+            html.Div(
+                    [
+                        indicator2(
+                            "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
+                        ),
+                        indicator2(
+                            "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
+                        ),
+                        indicator2(
+                            "#EF553B",
+                            "Best Service (Average time to repair per month):",
+                            "right_leads_indicator2",
                         ),
                     ],
                     className="row",
@@ -297,36 +397,32 @@ def render_content(tab):
             html.Div(
                 [
                 html.Div(
-                    [       #html.P("Split per Application of the Total Incident" ),
-                            dcc.Graph(
-                            id='graph2',
-                            style={"width":"100%","height":"100%","frameborder":"0"},
-                            config=dict(displayModeBar=False),
-                            ),
-                    ],
-                className="six columns chart_div"
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/89.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
                 ),
-                # html.Div(
-                #     [
-                # html.Iframe(
-                #             src="//plot.ly/~arthur_mf/82.embed?showlink=false",
-                #             style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                #          ),
-                #     ],
-                # className="four columns chart_div"
-                # ),
                 html.Div(
                     [#html.P("% per Service" ),
                 html.Iframe(
-                            src="//plot.ly/~arthur_mf/84.embed?showlink=false",
+                            src="//plot.ly/~arthur_mf/91.embed?showlink=false",
                             style={"width":"100%" ,"height":"100%","frameborder":"0"}
                          ),
                     ],
-                className="six columns chart_div"
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
                 ),
                 ],
                 className="row",
-                style={"marginTop": "10"},
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
         ),
         html.Div([
             html.Div([
@@ -351,54 +447,110 @@ def render_content(tab):
                         style={"marginTop": "10px"},
         ),
 
-        html.Div(
-                [
-                html.Div(
-                    [
-                            dcc.Graph(
-                            id='graph2',
-                            style={"width":"100%","height":"100%","frameborder":"0"},
-                            config=dict(displayModeBar=False),
-                            ),
-                    ],
-                className="six columns chart_div"
-                ),
-                # html.Div(
-                #     [
-                # html.Iframe(
-                #             src="//plot.ly/~arthur_mf/82.embed?showlink=false",
-                #             style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                #          ),
-                #     ],
-                # className="four columns chart_div"
-                # ),
-                html.Div(
-                    [
-                html.Iframe(
-                            src="//plot.ly/~arthur_mf/84.embed?showlink=false",
-                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                         ),
-                    ],
-                className="six columns chart_div"
-                ),
-                ],
-                className="row",
-                style={"max-height": "300px","marginTop": "10px"},
-        ),
+        # html.Div(
+        #         [
+        #         html.Div(
+        #             [
+        #                     dcc.Graph(
+        #                     id='graph2',
+        #                     style={"width":"100%","height":"100%","frameborder":"0"},
+        #                     config=dict(displayModeBar=False),
+        #                     ),
+        #             ],
+        #         className="six columns chart_div"
+        #         ),
+        #         html.Div(
+        #             [
+        #         html.Iframe(
+        #                     src="//plot.ly/~arthur_mf/84.embed?showlink=false",
+        #                     style={"width":"100%" ,"height":"100%","frameborder":"0"}
+        #                  ),
+        #             ],
+        #         className="six columns chart_div"
+        #         ),
+        #         ],
+        #         className="row",
+        #         style={"max-height": "300px","marginTop": "10px"},
+        # ),
                      #table div   
-            html.Div(
-                generate_table(df), 
+            
+            
+            
+            # html.Div(
+            #     generate_table(df), 
+            #     className="row",
+            #     id = "table", 
+            #     style={
+            #         "margin-top": "30px",
+            #     "max-height": "350px",
+            #     "overflow-y": "scroll",
+            #     "padding": "8px",
+            #     "background-color": "white","border": "1px solid rgb(200, 212, 227)","border-radius": "3px",},
+            # ),
+            html.Div([
+    #html.H2("Application Report"),
+                 html.Div([
+                     html.Div([
+            dcc.Dropdown(
+                id="Service",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in mgr_options4],
+                value='.COM'
+               )
+                ])
+                # dcc.Graph(id='graph44'),
+            ])
+        ],
                 className="row",
-                id = "table", 
-                style={
+                style={"marginTop": "10px"},
+        ),
+        html.Div([
+            html.Div(generate_table(df), id = "table")],
+            className="row",
+            style={
                     "margin-top": "30px",
                 "max-height": "350px",
                 "overflow-y": "scroll",
                 "padding": "8px",
-                "background-color": "white","border": "1px solid rgb(200, 212, 227)","border-radius": "3px",},
-            ),
-            ],
-        )
+                "background-color": "white","border": "1px solid rgb(200, 212, 227)",
+                "border-radius": "3px"},
+                    ),
+        html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/96.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                html.Div(
+                    [#html.P("% per Service" ),
+                html.Iframe(
+                            src="//plot.ly/~arthur_mf/97.embed?showlink=false",
+                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                         ),
+                    ],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+
+
+            ])
+ 
         #TABS BUSINESS (TO DO)
     elif tab == 'cases_tab':
         return html.Div([
@@ -438,7 +590,7 @@ def render_content(tab):
 
 
 def graph_44(input):
-    print(input)
+    #print(input)
 
     filtered_df = servAvail_df[servAvail_df['Service']==input]
 
@@ -462,7 +614,7 @@ def graph_44(input):
             barmode="group",
             legend={'x': 0, 'y': 1},
             hovermode='closest',
-            title="Availability for {}".format(input)
+            title="Service Availability Trends for {}".format(input)
             )
         }
         )
