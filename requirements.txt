@@ -31,3 +31,6 @@ urllib3==1.23
 Werkzeug==0.14.1
 wincertstore==0.2
 psycopg2>=2.7,<2.8 --no-binary psycopg2
+dash-auth==1.2.0
+flask-seasurf==0.2.2 
+ua-parser==0.8.0
