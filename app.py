@@ -21,16 +21,16 @@ import dash
 import plotly.plotly as py
 from plotly import graph_objs as go
 import dash
-import dash_auth
+#import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 #import plotly
 
 #import math
 # Keep this out of source code repository - save in a file or a database
-VALID_USERNAME_PASSWORD_PAIRS = [
-    ['test', 'test1']
-]
+# VALID_USERNAME_PASSWORD_PAIRS = [
+#     ['test', 'test1']
+# ]
 
 #import os
 # Modify these variables with your own info
@@ -270,10 +270,10 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.config['suppress_callback_exceptions']=True
 
-auth = dash_auth.BasicAuth(
-    app,
-    VALID_USERNAME_PASSWORD_PAIRS
-)
+# auth = dash_auth.BasicAuth(
+#     app,
+#     VALID_USERNAME_PASSWORD_PAIRS
+# )
 #%% BUilding the App 
 
 #%% Define value name for dropdown selection 
