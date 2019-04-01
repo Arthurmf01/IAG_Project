@@ -20,9 +20,22 @@ import os
 import dash
 import plotly.plotly as py
 from plotly import graph_objs as go
+import dash
+import dash_auth
+import dash_core_components as dcc
+import dash_html_components as html
+#import plotly
 
 #import math
+# Keep this out of source code repository - save in a file or a database
+VALID_USERNAME_PASSWORD_PAIRS = [
+    ['test', 'test1']
+]
 
+#import os
+# Modify these variables with your own info
+# APP_NAME = 'Dash Authentication Sample App'
+# APP_URL = 'https://my-dash-app.herokuapps.com'
 
 #%% Connect to Post GRE Database 
 
@@ -43,6 +56,9 @@ dff['month'] = pd.DatetimeIndex(dff['Date_raised']).month
 df = pd.read_sql_query('select "Incident_ID","Description","Date_Start","Priority","MTTR", "CI_Name","Assigned_Group", "Service" from "Critical_Service_Availability2";', conn)
 servAvail_df = pd.read_sql_query('select * from "ServAvailJF_1";', conn)
 
+backlog= pd.read_sql_query('select * from "Backlog Analysis";', conn)
+
+backlog=pd.read_sql_query('select "Incidenct Code","Priority","Last Modified Date","Tower Group", "Incident Description","Aging (Days)" from "Backlog Analysis"', conn)
 #%%
 #returns top indicator div
 def indicator(color, text, id_value):
@@ -84,7 +100,7 @@ def indicator2(color, text, id_value):
     )
 
 #Reading Data from the database : return a  toble (key,value)
-def generate_table(dataframe, max_rows=10):
+def generate_table(dataframe, max_rows=100):
     return html.Table(
         # Header
         [html.Tr([html.Th(col) for col in dataframe.columns])] +
@@ -95,11 +111,169 @@ def generate_table(dataframe, max_rows=10):
         ]) for i in range(min(len(dataframe), max_rows))]
     )
 
+def modal():
+    return html.Div(
+        html.Div(
+            [
+                html.Div(
+                    [   
+
+                        # modal header
+                        html.Div(
+                            [
+                                html.Span(
+                                    "New Month",
+                                    style={
+                                        "color": "#506784",
+                                        "fontWeight": "bold",
+                                        "fontSize": "20",
+                                    },
+                                ),
+                                html.Span(
+                                    "×",
+                                    id="leads_modal_close",
+                                    n_clicks=0,
+                                    style={
+                                        "float": "right",
+                                        "cursor": "pointer",
+                                        "marginTop": "0",
+                                        "marginBottom": "17",
+                                    },
+                                ),
+                            ],
+                            className="row",
+                            style={"borderBottom": "1px solid #C8D4E3"},
+                        ),
+
+                        # modal form
+                        html.Div(
+                            [
+                                html.P(
+                                    [
+                                        "File Name",
+                                        
+                                    ],
+                                    style={
+                                        "float": "left",
+                                        "marginTop": "4",
+                                        "marginBottom": "2",
+                                    },
+                                    className="row",
+                                ),
+                                dcc.Input(
+                                    id="new_lead_company",
+                                    # placeholder="Enter company name",
+                                    type="text",
+                                    value="",
+                                    style={"width": "100%"},
+                                ),
+                                html.P(
+                                    "Company State",
+                                    style={
+                                        "textAlign": "left",
+                                        "marginBottom": "2",
+                                        "marginTop": "4",
+                                    },
+                                ),
+                                dcc.Dropdown(
+                                    id="new_lead_state",
+                                    options=[
+                                            {"label": "January", "value": "January"},
+                                            {"label": "February", "value": "February"},
+                                            {"label": "March", "value": "March"},
+                                            {"label": "April", "value": "April"},
+                                            {"label": "May", "value": "May"},
+                                            {"label": "June", "value": "June"},
+                                            {"label": "July", "value": "July"},
+                                            {"label": "August", "value": "August"},
+                                            {"label": "September", "value": "September"},
+                                            {"label": "October", "value": "October"},
+                                            {"label": "November", "value": "November"},
+                                            {"label": "December", "value": "December"},
+                                        ],
+                                    placeholder="Select an Month",
+                                ),
+                                html.P(
+                                    "Status",
+                                    style={
+                                        "textAlign": "left",
+                                        "marginBottom": "2",
+                                        "marginTop": "4",
+                                    },
+                                ),
+                                html.P(
+                                    "Source",
+                                    style={
+                                        "textAlign": "left",
+                                        "marginBottom": "2",
+                                        "marginTop": "4",
+                                    },
+                                ),
+                                dcc.Dropdown(
+                                    id="new_lead_source",
+                                    options=[
+                                        {"label": "CSV File", "value": "Web"},
+                                        {
+                                            "label": "Excel File",
+                                            "value": "Phone Inquiry",
+                                        },
+                                        {
+                                            "label": "SQL Query",
+                                            "value": "Partner Referral",
+                                        },
+                                    ],
+                                    value="Web",
+                                ),
+                            ],
+                            className="row",
+                            style={"padding": "2% 8%"},
+                        ),
+
+                        # submit button
+                        
+                        html.Div([
+                                dcc.Upload([
+                                    'Drag and Drop or ',
+                                    html.A('Select a File')
+                                ], style={
+                                    'width': '100%',
+                                    'height': '60px',
+                                        'lineHeight': '60px',
+                                        'borderWidth': '1px',
+                                        'borderStyle': 'dashed',
+                                        'borderRadius': '5px',
+                                        'textAlign': 'center'
+                                    })
+                                ]),
+                        html.Hr(),
+                        
+                        html.Span(
+                            "Submit",
+                            id="submit_new_lead",
+                            n_clicks=0,
+                            className="button button--primary add"
+                        ),
+                    ],
+                    className="modal-content",
+                    style={"textAlign": "center"},
+                )
+            ],
+            className="modal",
+        ),
+        id="leads_modal",
+        style={"display": "none"},
+    )
+
 #%% Set Up Layout 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.config['suppress_callback_exceptions']=True
+
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
 #%% BUilding the App 
 
 #%% Define value name for dropdown selection 
@@ -107,6 +281,7 @@ mgr_options=df["CI_Name"].unique()
 mgr_options2=dff["Month "].unique()
 mgr_options3=dff["Domain"].unique()
 mgr_options4=dff["Service"].unique()
+mgr_options5=backlog["Priority"].unique()
 
 
 
@@ -191,7 +366,13 @@ app.layout = html.Div(
 #         # c=a+b
 #         c=len(dff.groupby([(dff["Domain"] == domain),(dff["Month "] == month)]).size())  
 #     return c
-
+# reset to 0 add button n_clicks property 
+@app.callback(
+    Output("new_lead", "n_clicks"),
+    [Input("leads_modal_close", "n_clicks"), Input("submit_new_lead", "n_clicks")],
+)
+def close_modal_callback(n, n2):
+    return 0
 
 @app.callback(
     Output("middle_leads_indicator", "children"), [Input('Month', 'value')]
@@ -221,8 +402,19 @@ def middle_leads_indicator_callback(input):
         worst_service = 'Flight Dispatching - 99.98%'
     return worst_service
 
-
-
+@app.callback(
+    Output("middle_leads_indicator3", "children"), [Input('Month', 'value')]
+)
+def middle_leads_indicator_callback(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '97.7% YTD'
+    if input == "January":
+        worst_service = '97.8% MTD'
+    if input == "February":
+        worst_service = '97.6% MTD'
+    return worst_service
 
 @app.callback(
     Output("left_leads_indicator", "children"), [Input('Month', 'value')]
@@ -254,6 +446,21 @@ def Reliability(input):
     return worst_service
 
 @app.callback(
+    Output("left_leads_indicator3", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '19537 Incidents (Jan/Feb)'
+    if input == "January":
+        worst_service = '10 401 Incidents'
+    if input == "February":
+        worst_service = '9 136 Incidents'
+    return worst_service
+
+
+@app.callback(
     Output("right_leads_indicator", "children"), [Input('Month', 'value')]
 )
 def Reliability(input):
@@ -265,6 +472,20 @@ def Reliability(input):
         worst_service = 'Flight Tracking - 430 MIN'
     if input == "February":
         worst_service = 'Crew Mng - 300 MIN'
+    return worst_service
+
+@app.callback(
+    Output("right_leads_indicator3", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '1293 Incidents remaining YTD'
+    if input == "January":
+        worst_service = '1293 Incidents remaining'
+    if input == "February":
+        worst_service = '1186 Incidents remaining'
     return worst_service
 
 @app.callback(
@@ -303,6 +524,29 @@ def update_graph(ci_name):
 
     return generate_table(a)
 
+# hide/show modal
+@app.callback(Output("leads_modal", "style"), [Input("new_lead", "n_clicks")])
+def display_leads_modal_callback(n):
+    print(n)
+    if n > 0:
+        return {"display": "block"}
+    return {"display": "none"}
+
+
+@app.callback(
+    dash.dependencies.Output('table2', 'children'),
+    [dash.dependencies.Input('Service2', 'value')])
+def update_graph(ci_name):
+    print(ci_name)
+    if ci_name == "All Applications":
+        df_plot = df.copy()
+    else:
+        df_plot = backlog[backlog['Priority'] == ci_name]
+
+    a = df_plot.loc[df_plot["Priority"] == ci_name]
+
+    return generate_table(a)
+
 
 @app.callback(Output('tabs-content-example', 'children'),
               [Input('tabs', 'value')])
@@ -334,6 +578,22 @@ def render_content(tab):
                             className="two columns",
                             style={"float": "left"},
                 ),
+                html.Div(
+                html.Span(
+                    "Add new Month",
+                    id="new_lead",
+                    n_clicks=0,
+                    className="button button--primary",
+                    style={
+                        "height": "34",
+                        "background": "#119DFF",
+                        "border": "1px solid #119DFF",
+                        "color": "white",
+                    },
+                ),
+                className="two columns",
+                style={"float": "right"},
+            ),
                 # html.Div(
                 #         #Domain Application
                 #         dcc.Dropdown(
@@ -547,6 +807,7 @@ def render_content(tab):
                         'height': '525px'
                 },
         ),
+        modal()
 
 
             ])
@@ -568,21 +829,205 @@ def render_content(tab):
         ])
         #Tabs overview : Here you'll be able to do some callbacks. 
     elif tab == 'opportunities_tab' :
-        return html.Div([
-            html.H3('Tab content 1'),
-            dcc.Graph(
-                id='graph-1-tabs',
-                figure={
-                    'data': [{
-                        'x': [1, 2, 3],
-                        'y': [3, 1, 2],
-                        'type': 'bar'
-                    }]
-                }
-            )
-        ])
+        return html.Div(
+            [
+                html.Div(
+                    [
+                html.Div(
+                        dcc.Dropdown(
+                                        id="Month",
+                                        options=[
+                                            {"label": "All Months", "value": "All_Months"},
+                                            {"label": "January", "value": "January"},
+                                            {"label": "February", "value": "February"},
+                                        ],
+                                        value='All_Months',
+                                    ),
+                        dcc.Dropdown(
+                                        id='dropdown-1',
+                                        options=[{'label': i,'value': i} for i in mgr_options],
+                                        value='All Applications'
+                        ),
+                            className="two columns",
+                            style={"float": "left"},
+                ),
+                    ],
+                    className="row",
+                ),
+            html.Div(
+                    [
+                        indicator(
+                            "#00cc96", "Total number of Incidents :", "left_leads_indicator3"
+                        ),
+                        indicator2(
+                            "#119DFF", "% of the incident solved (Raised-Solved):", "middle_leads_indicator3"
+                        ),
+                        indicator(
+                            "#EF553B",
+                            "Nb of Incident in Backlog:",
+                            "right_leads_indicator3",
+                        ),
+                    ],
+                    className="row",
+                    style={"marginTop": "10"}
+                ),
+            # html.Div(
+            #         [
+            #             indicator2(
+            #                 "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
+            #             ),
+            #             indicator2(
+            #                 "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
+            #             ),
+            #             indicator2(
+            #                 "#EF553B",
+            #                 "Best Service (Average time to repair per month):",
+            #                 "right_leads_indicator2",
+            #             ),
+            #         ],
+            #         className="row",
+            #         style={"marginTop": "10"}
+            #     ),
+            html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/99.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                html.Div(
+                    [#html.P("% per Service" ),
+                html.Iframe(
+                            src="//plot.ly/~arthur_mf/101.embed?showlink=false",
+                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                         ),
+                    ],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+        # html.Div([
+        #     html.Div([
+        #         html.Div([
+        #             dcc.Dropdown(
+        #             id='dropdown-55',
+        #             options=[{'label': i, 'value': i} for i in mgr_options4],
+        #             value='.COM',
+        #             placeholder="Select a Service",
+        #             )
+        #         ])
+        #     ])
+        # ],
+        #         className="row",
+        #         style={"marginTop": "10px"},
+        # ),
+        html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/103.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                html.Div(
+                    [#html.P("% per Service" ),
+                html.Iframe(
+                            src="//plot.ly/~arthur_mf/105.embed?showlink=false",
+                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                         ),
+                    ],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+        html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/108.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                html.Div(
+                    [#html.P("% per Service" ),
+                html.Iframe(
+                            src="//plot.ly/~arthur_mf/111.embed?showlink=false",
+                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                         ),
+                    ],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+        html.Div([
+                 html.Div([
+                     html.Div([
+            dcc.Dropdown(
+                id="Service2",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in mgr_options5],
+                value='.COM'
+               )
+                ])
+            ])
+        ],
+                className="row",
+                style={"marginTop": "10px"},
+        ),
+        html.Div(
+            
+            [
+            html.P("INCIDENT IN THE BACKLOG YTD" ),
+            html.Div(generate_table(backlog), id = "table2")],
+            className="row",
+            style={
+                    "margin-top": "30px",
+                "max-height": "350px",
+                "overflow-y": "scroll",
+                "padding": "8px",
+                "background-color": "white","border": "1px solid rgb(200, 212, 227)",
+                "border-radius": "3px"},
+                    ),
 
-#Callback Critical per incident services
+
+            ])
+
 @app.callback(
     Output('graph44', 'figure'),
     [Input('dropdown-55', 'value') 
@@ -656,6 +1101,7 @@ def graph_2(input):
             hovermode='closest',
         )}
 
+app.scripts.config.serve_locally = True
 
 if __name__ == '__main__':
     app.run_server(debug=True)
