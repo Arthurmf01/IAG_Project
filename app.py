@@ -289,14 +289,15 @@ app.layout = html.Div(
     [
         # header
         html.Div([
-
+            html.Div(
             html.Span("", className='app-title'),
-            
+            style={"float":"right","height":"100%"}),
             html.Div(
                 html.Img(src='https://s3-eu-west-1.amazonaws.com/iag-test1/test2.png',height="100%")
                 ,style={"float":"right","height":"100%"})
             ],
-            className="row header"
+            className="row header",
+            style={"background-color":"#DA162A"}
             ),
 
         # tabs
