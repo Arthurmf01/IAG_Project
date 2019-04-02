@@ -293,11 +293,11 @@ app.layout = html.Div(
             html.Span("", className='app-title'),
             style={"float":"right","height":"100%"}),
             html.Div(
-                html.Img(src='https://s3-eu-west-1.amazonaws.com/iag-test1/test2.png',height="100%")
+                html.Img(src='https://s3-eu-west-1.amazonaws.com/iag-test1/logo.png',height="100%")
                 ,style={"float":"right","height":"100%"})
             ],
             className="row header",
-            style={"background-color":"#DA162A"}
+            style={"background-color":"#424242"}
             ),
 
         # tabs
@@ -305,11 +305,11 @@ app.layout = html.Div(
 
             dcc.Tabs(
                 id="tabs",
-                style={"height":"20","verticalAlign":"middle"},
+                style={"height":"20","verticalAlign":"middle","margintop":"2"},
                 children=[
-                    dcc.Tab(label="Overview performance", value="opportunities_tab"),
-                    dcc.Tab(label="Performance of Critical Services per Month", value="leads_tab"),
-                    dcc.Tab(id="cases_tab",label="Critical Incident per Service", value="cases_tab"),
+                    dcc.Tab(label="SLA performance (IT view)", value="opportunities_tab"),
+                    dcc.Tab(label="Critical Services performance (Overview)", value="leads_tab"),
+                    dcc.Tab(id="cases_tab",label="Domain performance (Business view)", value="cases_tab"),
                 ],
                 value="leads_tab",
             )
@@ -382,7 +382,7 @@ def middle_leads_indicator_callback(input):
     #print(input)
     #df = pd.read_json(df, orient="split")
     if input == "All_Months":
-       worst_service = '.COM - 99.1%'
+       worst_service = '.COM - 99.48%'
     if input == "January":
         worst_service = 'Flight - 99.36%'
     if input == "February":
@@ -460,6 +460,19 @@ def Reliability(input):
         worst_service = '9 136 Incidents'
     return worst_service
 
+@app.callback(
+    Output("left_leads_indicator4", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '19537 Incidents (Jan/Feb)'
+    if input == "January":
+        worst_service = '10 401 Incidents'
+    if input == "February":
+        worst_service = '9 136 Incidents'
+    return worst_service
 
 @app.callback(
     Output("right_leads_indicator", "children"), [Input('Month', 'value')]
@@ -487,6 +500,34 @@ def Reliability(input):
         worst_service = '1293 Incidents remaining'
     if input == "February":
         worst_service = '1186 Incidents remaining'
+    return worst_service
+
+@app.callback(
+    Output("right_leads_indicator4", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = 'COM/OPS (11 Incident YTD)'
+    if input == "January":
+        worst_service = 'COMMERCIAL (5 Incidents)'
+    if input == "February":
+        worst_service = 'AIRPORT (7 Incidents) '
+    return worst_service
+
+@app.callback(
+    Output("middle_leads_indicator4", "children"), [Input('Month', 'value')]
+)
+def Reliability(input):
+    #print(input)
+    #df = pd.read_json(df, orient="split")
+    if input == "All_Months":
+       worst_service = '31 Critical Incidents Sev-1'
+    if input == "January":
+        worst_service = '13 Critical Incidents Sev-1'
+    if input == "February":
+        worst_service = '18 Critical Incidents Sev-1'
     return worst_service
 
 @app.callback(
@@ -587,31 +628,15 @@ def render_content(tab):
                     className="button button--primary",
                     style={
                         "height": "34",
-                        "background": "#119DFF",
-                        "border": "1px solid #119DFF",
+                        "background": "#424242",
+                        "border": "1px solid #424242",
                         "color": "white",
                     },
                 ),
                 className="two columns",
                 style={"float": "right"},
             ),
-                # html.Div(
-                #         #Domain Application
-                #         dcc.Dropdown(
-                #                         id="Domain",
-                #                         options=[
-                #                             {"label": "All Domains", "value": "All_Domains"},
-                #                             {"label": "Operations", "value": "OPERATIONS"},
-                #                             {"label": "Airports", "value": "AIRPORTS"},
-                #                             {"label": "Commercial", "value": "COMMERCIAL"},
-                #                         ],                                 
-                #                         # [
-                #                         #     {'label': i,'value': i} for i in mgr_options3
-                #                         #     ],
-                #                         placeholder="Select an Domain",
-                #                     ),
-                #             className="two columns",
-                # ),
+                
                     ],
                     className="row",
                 ),
@@ -815,19 +840,193 @@ def render_content(tab):
  
         #TABS BUSINESS (TO DO)
     elif tab == 'cases_tab':
-        return html.Div([
-            html.H3('Tab content 2'),
-            dcc.Graph(
-                id='graph-2-tabs',
-                figure={
-                    'data': [{
-                        'x': [1, 2, 3],
-                        'y': [5, 10, 6],
-                        'type': 'bar'
-                    }]
-                }
-            )
-        ])
+        return html.Div(
+            [
+                html.Div(
+                    [
+                html.Div(
+                        dcc.Dropdown(
+                                        id="Month",
+                                        options=[
+                                            {"label": "All Months", "value": "All_Months"},
+                                            {"label": "January", "value": "January"},
+                                            {"label": "February", "value": "February"},
+                                        ],
+                                        value='All_Months',
+                                    ),
+                                    
+                        dcc.Dropdown(
+                                        id='dropdown-1',
+                                        options=[{'label': i,'value': i} for i in mgr_options],
+                                        value='All Applications'
+                        ),
+                            className="two columns",
+                            style={"float": "left"},
+                ),
+                    ],
+                    className="row",
+                ),
+            html.Div(
+                    [
+                        indicator2(
+                            "#00cc96", "Total number of Incidents :", "left_leads_indicator4"
+                        ),
+                        indicator2(
+                            "#119DFF", "Total Number of Critical Incidents:", "middle_leads_indicator4"
+                        ),
+                        indicator(
+                            "#EF553B",
+                            "Most Impacted Service (Critical Incident only):",
+                            "right_leads_indicator4",
+                        ),
+                    ],
+                    className="row",
+                    style={"marginTop": "10"}
+                ),
+            # html.Div(
+            #         [
+            #             indicator2(
+            #                 "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
+            #             ),
+            #             indicator2(
+            #                 "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
+            #             ),
+            #             indicator2(
+            #                 "#EF553B",
+            #                 "Best Service (Average time to repair per month):",
+            #                 "right_leads_indicator2",
+            #             ),
+            #         ],
+            #         className="row",
+            #         style={"marginTop": "10"}
+            #     ),
+        #     html.Div(
+        #         [
+        #         html.Div(
+        #             [      
+        #             html.Iframe(
+        #                         src="//plot.ly/~arthur_mf/99.embed?showlink=false",
+        #                         style={"width":"100%" ,"height":"100%","frameborder":"0"}
+        #                )],
+        #         className="six columns chart_div",
+        #         style={"marginTop": "10",
+        #                 'height': '500px' },
+        #         ),
+        #         html.Div(
+        #             [#html.P("% per Service" ),
+        #         html.Iframe(
+        #                     src="//plot.ly/~arthur_mf/101.embed?showlink=false",
+        #                     style={"width":"100%" ,"height":"100%","frameborder":"0"}
+        #                  ),
+        #             ],
+        #         className="six columns chart_div",
+        #         style={"marginTop": "10",
+        #                 'height': '500px'
+        #         },
+        #         ),
+        #         ],
+        #         className="row",
+        #         style={"marginTop": "10",
+        #                 'height': '525px'
+        #         },
+        # ),
+        # html.Div([
+        #     html.Div([
+        #         html.Div([
+        #             dcc.Dropdown(
+        #             id='dropdown-55',
+        #             options=[{'label': i, 'value': i} for i in mgr_options4],
+        #             value='.COM',
+        #             placeholder="Select a Service",
+        #             )
+        #         ])
+        #     ])
+        # ],
+        #         className="row",
+        #         style={"marginTop": "10px"},
+        # ),
+        html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/121.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                html.Div(
+                    [#html.P("% per Service" ),
+                html.Iframe(
+                            src="//plot.ly/~arthur_mf/99.embed?showlink=false",
+                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                         ),
+                    ],
+                className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px'
+                },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+        html.Div(
+                [
+                html.Div(
+                    [      
+                    html.Iframe(
+                                src="//plot.ly/~arthur_mf/118.embed?showlink=false",
+                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
+                       )],
+                # className="six columns chart_div",
+                style={"marginTop": "10",
+                        'height': '500px' },
+                ),
+                ],
+                className="row",
+                style={"marginTop": "10",
+                        'height': '525px'
+                },
+        ),
+        # html.Div([
+        #          html.Div([
+        #              html.Div([
+        #     dcc.Dropdown(
+        #         id="Service2",
+        #         options=[{
+        #             'label': i,
+        #             'value': i
+        #         } for i in mgr_options5],
+        #         value='.COM'
+        #        )
+        #         ])
+        #     ])
+        # ],
+        #         className="row",
+        #         style={"marginTop": "10px"},
+        # # ),
+        # html.Div(
+            
+            # [
+            # html.P("INCIDENT IN THE BACKLOG YTD" ),
+            # html.Div(generate_table(backlog), id = "table2")],
+            # className="row",
+            # style={
+            #         "margin-top": "30px",
+            #     "max-height": "350px",
+            #     "overflow-y": "scroll",
+            #     "padding": "8px",
+            #     "background-color": "white","border": "1px solid rgb(200, 212, 227)",
+            #     "border-radius": "3px"},
+            #         ),
+
+
+            ])
         #Tabs overview : Here you'll be able to do some callbacks. 
     elif tab == 'opportunities_tab' :
         return html.Div(
