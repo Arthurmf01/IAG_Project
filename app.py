@@ -301,8 +301,8 @@ app.layout = html.Div(
                 id="tabs",
                 style={"height":"20","verticalAlign":"middle","margintop":"5"},
                 children=[
-                    dcc.Tab(label="DESIGNER TABS", value="opportunities_tab"),
-                    dcc.Tab(label="MANUFACTURER TABS", value="leads_tab"),
+                    dcc.Tab(label="MANUFACTURER TABS", value="opportunities_tab"),
+                    dcc.Tab(label="DESIGNER TABS", value="leads_tab"),
                     dcc.Tab(id="cases_tab",label="END-CUSTOMER TABS", value="cases_tab"),
                 ],
                 value="leads_tab",
