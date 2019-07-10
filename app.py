@@ -122,7 +122,7 @@ def modal():
                         html.Div(
                             [
                                 html.Span(
-                                    "New Month",
+                                    "NEW COLLECTION",
                                     style={
                                         "color": "#506784",
                                         "fontWeight": "bold",
@@ -150,7 +150,7 @@ def modal():
                             [
                                 html.P(
                                     [
-                                        "File Name",
+                                        "Company Name",
                                         
                                     ],
                                     style={
@@ -168,7 +168,7 @@ def modal():
                                     style={"width": "100%"},
                                 ),
                                 html.P(
-                                    "Company State",
+                                    "Certified Company ",
                                     style={
                                         "textAlign": "left",
                                         "marginBottom": "2",
@@ -178,20 +178,14 @@ def modal():
                                 dcc.Dropdown(
                                     id="new_lead_state",
                                     options=[
-                                            {"label": "January", "value": "January"},
-                                            {"label": "February", "value": "February"},
-                                            {"label": "March", "value": "March"},
-                                            {"label": "April", "value": "April"},
-                                            {"label": "May", "value": "May"},
-                                            {"label": "June", "value": "June"},
-                                            {"label": "July", "value": "July"},
-                                            {"label": "August", "value": "August"},
-                                            {"label": "September", "value": "September"},
-                                            {"label": "October", "value": "October"},
-                                            {"label": "November", "value": "November"},
-                                            {"label": "December", "value": "December"},
+                                            {"label": "Sungold Cotton Farm", "value": "January"},
+                                            {"label": "Better Cotton Initiative", "value": "February"},
+                                            {"label": "Cotton made in Africa", "value": "March"},
+                                            {"label": "Organic Cotton", "value": "April"},
+                                            {"label": "Fairtrade Cotton", "value": "May"},
+                                            {"label": "Recycled Cotton", "value": "June"},
                                         ],
-                                    placeholder="Select an Month",
+                                    placeholder="Select a Cotton Certified Company",
                                 ),
                                 html.P(
                                     "Status",
@@ -293,11 +287,11 @@ app.layout = html.Div(
             html.Span("", className='app-title'),
             style={"float":"right","height":"100%"}),
             html.Div(
-                html.Img(src='https://s3-eu-west-1.amazonaws.com/iag-test1/logo.png',height="100%")
+                html.Img(src='https://upload.wikimedia.org/wikipedia/fr/thumb/2/2b/Logo_Inditex.svg/1280px-Logo_Inditex.svg.png',height="100%")
                 ,style={"float":"right","height":"100%"})
             ],
             className="row header",
-            style={"background-color":"#424242"}
+            style={"background-color":"#e3cbca"}
             ),
 
         # tabs
@@ -305,11 +299,11 @@ app.layout = html.Div(
 
             dcc.Tabs(
                 id="tabs",
-                style={"height":"20","verticalAlign":"middle","margintop":"2"},
+                style={"height":"20","verticalAlign":"middle","margintop":"5"},
                 children=[
-                    dcc.Tab(label="SLA performance (IT view)", value="opportunities_tab"),
-                    dcc.Tab(label="Critical Services performance (Overview)", value="leads_tab"),
-                    dcc.Tab(id="cases_tab",label="Domain performance (Business view)", value="cases_tab"),
+                    dcc.Tab(label="DESIGNER TABS", value="opportunities_tab"),
+                    dcc.Tab(label="MANUFACTURER TABS", value="leads_tab"),
+                    dcc.Tab(id="cases_tab",label="END-CUSTOMER TABS", value="cases_tab"),
                 ],
                 value="leads_tab",
             )
@@ -410,11 +404,11 @@ def middle_leads_indicator_callback(input):
     #print(input)
     #df = pd.read_json(df, orient="split")
     if input == "All_Months":
-       worst_service = '97.7% YTD'
+       worst_service = '0.001% FAIRTRADE/99.1  BCI'
     if input == "January":
-        worst_service = '97.8% MTD'
+        worst_service = '33% CONV.COTTON/77% ORGANIC'
     if input == "February":
-        worst_service = '97.6% MTD'
+        worst_service = '13% ORGANIC/37% BCI/50% FAIRTRADE'
     return worst_service
 
 @app.callback(
@@ -453,11 +447,11 @@ def Reliability(input):
     #print(input)
     #df = pd.read_json(df, orient="split")
     if input == "All_Months":
-       worst_service = '19537 Incidents (Jan/Feb)'
+       worst_service = 'Laguna Clothing Limited - Certified'
     if input == "January":
-        worst_service = '10 401 Incidents'
+        worst_service = 'Sun Gold Cotton - Certified'
     if input == "February":
-        worst_service = '9 136 Incidents'
+        worst_service = 'Malaysia Clothing - Certified'
     return worst_service
 
 @app.callback(
@@ -495,11 +489,11 @@ def Reliability(input):
     #print(input)
     #df = pd.read_json(df, orient="split")
     if input == "All_Months":
-       worst_service = '1293 Incidents remaining YTD'
+       worst_service = 'ORGANICS'
     if input == "January":
-        worst_service = '1293 Incidents remaining'
+        worst_service = 'RECYCLED'
     if input == "February":
-        worst_service = '1186 Incidents remaining'
+        worst_service = 'EUROPEAN LINEN'
     return worst_service
 
 @app.callback(
@@ -509,11 +503,11 @@ def Reliability(input):
     #print(input)
     #df = pd.read_json(df, orient="split")
     if input == "All_Months":
-       worst_service = 'COM/OPS (11 Incident YTD)'
+       worst_service = 'LINEN'
     if input == "January":
-        worst_service = 'COMMERCIAL (5 Incidents)'
+        worst_service = 'NON LINEN'
     if input == "February":
-        worst_service = 'AIRPORT (7 Incidents) '
+        worst_service = 'COTTON '
     return worst_service
 
 @app.callback(
@@ -603,10 +597,10 @@ def render_content(tab):
                         dcc.Dropdown(
                                         id="Month",
                                         options=[
-                                            {"label": "All Months", "value": "All_Months"},
-                                            {"label": "January", "value": "January"},
-                                            {"label": "February", "value": "February"},
-                                            # {"label": "March", "value": "March"},
+                                            {"label": "All Collection", "value": "All_Months"},
+                                            {"label": "MEN", "value": "January"},
+                                            {"label": "WOMAN", "value": "February"},
+                                             {"label": "KID", "value": "March"},
                                             # {"label": "April", "value": "April"},
                                             # {"label": "June", "value": "June"},
                                         ],
@@ -622,7 +616,7 @@ def render_content(tab):
                 ),
                 html.Div(
                 html.Span(
-                    "Add new Month",
+                    "Add Collection",
                     id="new_lead",
                     n_clicks=0,
                     className="button button--primary",
@@ -646,32 +640,15 @@ def render_content(tab):
             html.Div(
                     [
                         indicator(
-                            "#00cc96", "Worst Service (Number of Days between 2 failures):", "left_leads_indicator"
+                            "#00cc96", "CARE FOR PLANET :", "left_leads_indicator3"
+                        ),
+                        indicator2(
+                            "#00cc96", "CARE FOR FIBER :", "middle_leads_indicator3"
                         ),
                         indicator(
-                            "#119DFF", "Availability - Worst Service:", "middle_leads_indicator"
-                        ),
-                        indicator(
-                            "#EF553B",
-                            "Worst Service (Average time to repair per month):",
-                            "right_leads_indicator",
-                        ),
-                    ],
-                    className="row",
-                    style={"marginTop": "10"}
-                ),
-            html.Div(
-                    [
-                        indicator2(
-                            "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
-                        ),
-                        indicator2(
-                            "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
-                        ),
-                        indicator2(
-                            "#EF553B",
-                            "Best Service (Average time to repair per month):",
-                            "right_leads_indicator2",
+                            "#00cc96",
+                            "DIRECT SUPPLIERS AND GARMENT MANUFACTURERS :",
+                            "right_leads_indicator3",
                         ),
                     ],
                     className="row",
@@ -685,7 +662,7 @@ def render_content(tab):
                 html.Div(
                     [      
                     html.Iframe(
-                                src="//plot.ly/~arthur_mf/89.embed?showlink=false",
+                                src="//plot.ly/~arthur_mf/127.embed?showlink=false",
                                 style={"width":"100%" ,"height":"100%","frameborder":"0"}
                        )],
                 className="six columns chart_div",
@@ -695,7 +672,7 @@ def render_content(tab):
                 html.Div(
                     [#html.P("% per Service" ),
                 html.Iframe(
-                            src="//plot.ly/~arthur_mf/91.embed?showlink=false",
+                            src="//plot.ly/~arthur_mf/129.embed?showlink=false",
                             style={"width":"100%" ,"height":"100%","frameborder":"0"}
                          ),
                     ],
@@ -848,9 +825,9 @@ def render_content(tab):
                         dcc.Dropdown(
                                         id="Month",
                                         options=[
-                                            {"label": "All Months", "value": "All_Months"},
-                                            {"label": "January", "value": "January"},
-                                            {"label": "February", "value": "February"},
+                                            {"label": "All Collection", "value": "All_Months"},
+                                            {"label": "MAN", "value": "January"},
+                                            {"label": "WOMAN", "value": "February"},
                                         ],
                                         value='All_Months',
                                     ),
@@ -875,7 +852,7 @@ def render_content(tab):
                             "#119DFF", "Total Number of Critical Incidents:", "middle_leads_indicator4"
                         ),
                         indicator(
-                            "#EF553B",
+                            "#14ae11",
                             "Most Impacted Service (Critical Incident only):",
                             "right_leads_indicator4",
                         ),
