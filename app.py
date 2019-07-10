@@ -287,11 +287,11 @@ app.layout = html.Div(
             html.Span("", className='app-title'),
             style={"float":"right","height":"100%"}),
             html.Div(
-                html.Img(src='https://upload.wikimedia.org/wikipedia/fr/thumb/2/2b/Logo_Inditex.svg/1280px-Logo_Inditex.svg.png',height="100%")
+                html.Img(src='https://oceanic.global/wp-content/uploads/2018/08/logo-ecoalf.png',height="125%")
                 ,style={"float":"right","height":"100%"})
             ],
             className="row header",
-            style={"background-color":"#e3cbca"}
+            style={"background-color":"#b5b8b5"}
             ),
 
         # tabs
@@ -672,7 +672,7 @@ def render_content(tab):
                 html.Div(
                     [#html.P("% per Service" ),
                 html.Iframe(
-                            src="//plot.ly/~arthur_mf/129.embed?showlink=false",
+                            src="//plot.ly/~arthur_mf/131.embed?showlink=false",
                             style={"width":"100%" ,"height":"100%","frameborder":"0"}
                          ),
                     ],
@@ -687,28 +687,7 @@ def render_content(tab):
                         'height': '525px'
                 },
         ),
-        html.Div([
-            html.Div([
-                html.Div([
-                    dcc.Dropdown(
-                    id='dropdown-55',
-                    options=[{'label': i, 'value': i} for i in mgr_options4],
-                    value='.COM',
-                    placeholder="Select a Service",
-                    )
-                ])
-                # dcc.Graph(id='graph44'),
-            ])
-        ],
-                className="row",
-                style={"marginTop": "10px"},
-        ),
-        html.Div([
-                dcc.Graph(id='graph44')
-        ],
-                        className="row",
-                        style={"marginTop": "10px"},
-        ),
+        
 
         # html.Div(
         #         [
@@ -750,42 +729,14 @@ def render_content(tab):
             #     "padding": "8px",
             #     "background-color": "white","border": "1px solid rgb(200, 212, 227)","border-radius": "3px",},
             # ),
-            html.Div([
-    #html.H2("Application Report"),
-                 html.Div([
-                     html.Div([
-            dcc.Dropdown(
-                id="Service",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in mgr_options4],
-                value='.COM'
-               )
-                ])
-                # dcc.Graph(id='graph44'),
-            ])
-        ],
-                className="row",
-                style={"marginTop": "10px"},
-        ),
-        html.Div([
-            html.Div(generate_table(df), id = "table")],
-            className="row",
-            style={
-                    "margin-top": "30px",
-                "max-height": "350px",
-                "overflow-y": "scroll",
-                "padding": "8px",
-                "background-color": "white","border": "1px solid rgb(200, 212, 227)",
-                "border-radius": "3px"},
-                    ),
+          
+        
         html.Div(
                 [
                 html.Div(
                     [      
                     html.Iframe(
-                                src="//plot.ly/~arthur_mf/96.embed?showlink=false",
+                                src="//plot.ly/~arthur_mf/133.embed?showlink=false",
                                 style={"width":"100%" ,"height":"100%","frameborder":"0"}
                        )],
                 className="six columns chart_div",
@@ -795,7 +746,7 @@ def render_content(tab):
                 html.Div(
                     [#html.P("% per Service" ),
                 html.Iframe(
-                            src="//plot.ly/~arthur_mf/97.embed?showlink=false",
+                            src="//plot.ly/~arthur_mf/137.embed?showlink=false",
                             style={"width":"100%" ,"height":"100%","frameborder":"0"}
                          ),
                     ],
@@ -817,393 +768,10 @@ def render_content(tab):
  
         #TABS BUSINESS (TO DO)
     elif tab == 'cases_tab':
-        return html.Div(
-            [
-                html.Div(
-                    [
-                html.Div(
-                        dcc.Dropdown(
-                                        id="Month",
-                                        options=[
-                                            {"label": "All Collection", "value": "All_Months"},
-                                            {"label": "MAN", "value": "January"},
-                                            {"label": "WOMAN", "value": "February"},
-                                        ],
-                                        value='All_Months',
-                                    ),
-                                    
-                        dcc.Dropdown(
-                                        id='dropdown-1',
-                                        options=[{'label': i,'value': i} for i in mgr_options],
-                                        value='All Applications'
-                        ),
-                            className="two columns",
-                            style={"float": "left"},
-                ),
-                    ],
-                    className="row",
-                ),
-            html.Div(
-                    [
-                        indicator2(
-                            "#00cc96", "Total number of Incidents :", "left_leads_indicator4"
-                        ),
-                        indicator2(
-                            "#119DFF", "Total Number of Critical Incidents:", "middle_leads_indicator4"
-                        ),
-                        indicator(
-                            "#14ae11",
-                            "Most Impacted Service (Critical Incident only):",
-                            "right_leads_indicator4",
-                        ),
-                    ],
-                    className="row",
-                    style={"marginTop": "10"}
-                ),
-            # html.Div(
-            #         [
-            #             indicator2(
-            #                 "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
-            #             ),
-            #             indicator2(
-            #                 "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
-            #             ),
-            #             indicator2(
-            #                 "#EF553B",
-            #                 "Best Service (Average time to repair per month):",
-            #                 "right_leads_indicator2",
-            #             ),
-            #         ],
-            #         className="row",
-            #         style={"marginTop": "10"}
-            #     ),
-        #     html.Div(
-        #         [
-        #         html.Div(
-        #             [      
-        #             html.Iframe(
-        #                         src="//plot.ly/~arthur_mf/99.embed?showlink=false",
-        #                         style={"width":"100%" ,"height":"100%","frameborder":"0"}
-        #                )],
-        #         className="six columns chart_div",
-        #         style={"marginTop": "10",
-        #                 'height': '500px' },
-        #         ),
-        #         html.Div(
-        #             [#html.P("% per Service" ),
-        #         html.Iframe(
-        #                     src="//plot.ly/~arthur_mf/101.embed?showlink=false",
-        #                     style={"width":"100%" ,"height":"100%","frameborder":"0"}
-        #                  ),
-        #             ],
-        #         className="six columns chart_div",
-        #         style={"marginTop": "10",
-        #                 'height': '500px'
-        #         },
-        #         ),
-        #         ],
-        #         className="row",
-        #         style={"marginTop": "10",
-        #                 'height': '525px'
-        #         },
-        # ),
-        # html.Div([
-        #     html.Div([
-        #         html.Div([
-        #             dcc.Dropdown(
-        #             id='dropdown-55',
-        #             options=[{'label': i, 'value': i} for i in mgr_options4],
-        #             value='.COM',
-        #             placeholder="Select a Service",
-        #             )
-        #         ])
-        #     ])
-        # ],
-        #         className="row",
-        #         style={"marginTop": "10px"},
-        # ),
-        html.Div(
-                [
-                html.Div(
-                    [      
-                    html.Iframe(
-                                src="//plot.ly/~arthur_mf/121.embed?showlink=false",
-                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                       )],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px' },
-                ),
-                html.Div(
-                    [#html.P("% per Service" ),
-                html.Iframe(
-                            src="//plot.ly/~arthur_mf/99.embed?showlink=false",
-                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                         ),
-                    ],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px'
-                },
-                ),
-                ],
-                className="row",
-                style={"marginTop": "10",
-                        'height': '525px'
-                },
-        ),
-        html.Div(
-                [
-                html.Div(
-                    [      
-                    html.Iframe(
-                                src="//plot.ly/~arthur_mf/118.embed?showlink=false",
-                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                       )],
-                # className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px' },
-                ),
-                ],
-                className="row",
-                style={"marginTop": "10",
-                        'height': '525px'
-                },
-        ),
-        # html.Div([
-        #          html.Div([
-        #              html.Div([
-        #     dcc.Dropdown(
-        #         id="Service2",
-        #         options=[{
-        #             'label': i,
-        #             'value': i
-        #         } for i in mgr_options5],
-        #         value='.COM'
-        #        )
-        #         ])
-        #     ])
-        # ],
-        #         className="row",
-        #         style={"marginTop": "10px"},
-        # # ),
-        # html.Div(
-            
-            # [
-            # html.P("INCIDENT IN THE BACKLOG YTD" ),
-            # html.Div(generate_table(backlog), id = "table2")],
-            # className="row",
-            # style={
-            #         "margin-top": "30px",
-            #     "max-height": "350px",
-            #     "overflow-y": "scroll",
-            #     "padding": "8px",
-            #     "background-color": "white","border": "1px solid rgb(200, 212, 227)",
-            #     "border-radius": "3px"},
-            #         ),
-
-
-            ])
+        return html.Div()
         #Tabs overview : Here you'll be able to do some callbacks. 
     elif tab == 'opportunities_tab' :
-        return html.Div(
-            [
-                html.Div(
-                    [
-                html.Div(
-                        dcc.Dropdown(
-                                        id="Month",
-                                        options=[
-                                            {"label": "All Months", "value": "All_Months"},
-                                            {"label": "January", "value": "January"},
-                                            {"label": "February", "value": "February"},
-                                        ],
-                                        value='All_Months',
-                                    ),
-                        dcc.Dropdown(
-                                        id='dropdown-1',
-                                        options=[{'label': i,'value': i} for i in mgr_options],
-                                        value='All Applications'
-                        ),
-                            className="two columns",
-                            style={"float": "left"},
-                ),
-                    ],
-                    className="row",
-                ),
-            html.Div(
-                    [
-                        indicator(
-                            "#00cc96", "Total number of Incidents :", "left_leads_indicator3"
-                        ),
-                        indicator2(
-                            "#119DFF", "% of the incident solved (Raised-Solved):", "middle_leads_indicator3"
-                        ),
-                        indicator(
-                            "#EF553B",
-                            "Nb of Incident in Backlog:",
-                            "right_leads_indicator3",
-                        ),
-                    ],
-                    className="row",
-                    style={"marginTop": "10"}
-                ),
-            # html.Div(
-            #         [
-            #             indicator2(
-            #                 "#00cc96", "Best Service (Number of Days between 2 failures):", "left_leads_indicator2"
-            #             ),
-            #             indicator2(
-            #                 "#119DFF", "Availability - Best Service:", "middle_leads_indicator2"
-            #             ),
-            #             indicator2(
-            #                 "#EF553B",
-            #                 "Best Service (Average time to repair per month):",
-            #                 "right_leads_indicator2",
-            #             ),
-            #         ],
-            #         className="row",
-            #         style={"marginTop": "10"}
-            #     ),
-            html.Div(
-                [
-                html.Div(
-                    [      
-                    html.Iframe(
-                                src="//plot.ly/~arthur_mf/99.embed?showlink=false",
-                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                       )],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px' },
-                ),
-                html.Div(
-                    [#html.P("% per Service" ),
-                html.Iframe(
-                            src="//plot.ly/~arthur_mf/101.embed?showlink=false",
-                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                         ),
-                    ],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px'
-                },
-                ),
-                ],
-                className="row",
-                style={"marginTop": "10",
-                        'height': '525px'
-                },
-        ),
-        # html.Div([
-        #     html.Div([
-        #         html.Div([
-        #             dcc.Dropdown(
-        #             id='dropdown-55',
-        #             options=[{'label': i, 'value': i} for i in mgr_options4],
-        #             value='.COM',
-        #             placeholder="Select a Service",
-        #             )
-        #         ])
-        #     ])
-        # ],
-        #         className="row",
-        #         style={"marginTop": "10px"},
-        # ),
-        html.Div(
-                [
-                html.Div(
-                    [      
-                    html.Iframe(
-                                src="//plot.ly/~arthur_mf/103.embed?showlink=false",
-                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                       )],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px' },
-                ),
-                html.Div(
-                    [#html.P("% per Service" ),
-                html.Iframe(
-                            src="//plot.ly/~arthur_mf/105.embed?showlink=false",
-                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                         ),
-                    ],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px'
-                },
-                ),
-                ],
-                className="row",
-                style={"marginTop": "10",
-                        'height': '525px'
-                },
-        ),
-        html.Div(
-                [
-                html.Div(
-                    [      
-                    html.Iframe(
-                                src="//plot.ly/~arthur_mf/108.embed?showlink=false",
-                                style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                       )],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px' },
-                ),
-                html.Div(
-                    [#html.P("% per Service" ),
-                html.Iframe(
-                            src="//plot.ly/~arthur_mf/111.embed?showlink=false",
-                            style={"width":"100%" ,"height":"100%","frameborder":"0"}
-                         ),
-                    ],
-                className="six columns chart_div",
-                style={"marginTop": "10",
-                        'height': '500px'
-                },
-                ),
-                ],
-                className="row",
-                style={"marginTop": "10",
-                        'height': '525px'
-                },
-        ),
-        html.Div([
-                 html.Div([
-                     html.Div([
-            dcc.Dropdown(
-                id="Service2",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in mgr_options5],
-                value='.COM'
-               )
-                ])
-            ])
-        ],
-                className="row",
-                style={"marginTop": "10px"},
-        ),
-        html.Div(
-            
-            [
-            html.P("INCIDENT IN THE BACKLOG YTD" ),
-            html.Div(generate_table(backlog), id = "table2")],
-            className="row",
-            style={
-                    "margin-top": "30px",
-                "max-height": "350px",
-                "overflow-y": "scroll",
-                "padding": "8px",
-                "background-color": "white","border": "1px solid rgb(200, 212, 227)",
-                "border-radius": "3px"},
-                    ),
-
-
-            ])
+        return html.Div()
 
 @app.callback(
     Output('graph44', 'figure'),
