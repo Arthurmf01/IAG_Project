@@ -41,7 +41,7 @@ import dash_html_components as html
 
 #Activate this connection if you want to work online
 #DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
-conn = pg.connect("postgres://wxlqholfuolnig:07c0d4474324d4bace4694e120a3b55744f79818978ff94dd8f396c41564851e@ec2-54-225-129-101.compute-1.amazonaws.com:5432/d7o135vac7hf24")
+conn = pg.connect("postgres://pxplsncunduduh:29739a72eb07d43f0749c913d10dfe65da991e8966e22347e11baff74c0a5763@ec2-107-21-120-104.compute-1.amazonaws.com:5432/db60bordb6gsra")
 #Activate this connection if you want to work with the local PostGre Database (Localhost)
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
