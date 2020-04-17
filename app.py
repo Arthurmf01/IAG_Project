@@ -41,11 +41,7 @@ import dash_html_components as html
 
 #Activate this connection if you want to work online
 #DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
-<<<<<<< HEAD
 conn = pg.connect("postgres://pxplsncunduduh:29739a72eb07d43f0749c913d10dfe65da991e8966e22347e11baff74c0a5763@ec2-107-21-120-104.compute-1.amazonaws.com:5432/db60bordb6gsra")
-=======
-conn = pg.connect("postgres://tydzgthbfkifxy:58678ccbab767710674d5f5864118633bdcedaf676617ec4f5dd4475cd36d1bc@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d3c492q00bssm9")
->>>>>>> parent of e6b00b4... update database after crash
 #Activate this connection if you want to work with the local PostGre Database (Localhost)
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
