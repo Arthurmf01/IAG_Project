@@ -41,20 +41,24 @@ import dash_html_components as html
 
 #Activate this connection if you want to work online
 #DATABASE_URL = os.environ['https://s3-eu-west-1.amazonaws.com/iag-test1/Test1.csv']
+<<<<<<< HEAD
 conn = pg.connect("postgres://pxplsncunduduh:29739a72eb07d43f0749c913d10dfe65da991e8966e22347e11baff74c0a5763@ec2-107-21-120-104.compute-1.amazonaws.com:5432/db60bordb6gsra")
+=======
+conn = pg.connect("postgres://tydzgthbfkifxy:58678ccbab767710674d5f5864118633bdcedaf676617ec4f5dd4475cd36d1bc@ec2-23-23-241-119.compute-1.amazonaws.com:5432/d3c492q00bssm9")
+>>>>>>> parent of e6b00b4... update database after crash
 #Activate this connection if you want to work with the local PostGre Database (Localhost)
 #conn = pg.connect(database="postgres", user = "postgres",password = "", host = "127.0.0.1", port = "5431")
 print ("Opened database successfully")
 
 #df = pd.read_sql_query('select * from "Critical_Service_Availability2" limit 1000;', conn)
 
-dff=pd.read_sql_query('select * from "Critical_Service_Availability2 2 2";', conn)
+dff=pd.read_sql_query('select * from "Critical_Service_Availability2";', conn)
 dff['year'] = pd.DatetimeIndex(dff['Date_raised']).year
 dff['month'] = pd.DatetimeIndex(dff['Date_raised']).month
 
 
-df = pd.read_sql_query('select "Incident_ID","Description","Date_Start","Priority","MTTR", "CI_Name","Assigned_Group", "Service" from "Critical_Service_Availability2 2 2";', conn)
-servAvail_df = pd.read_sql_query('select * from "ServAvailJF";', conn)
+df = pd.read_sql_query('select "Incident_ID","Description","Date_Start","Priority","MTTR", "CI_Name","Assigned_Group", "Service" from "Critical_Service_Availability2";', conn)
+servAvail_df = pd.read_sql_query('select * from "ServAvailJF_1";', conn)
 
 backlog= pd.read_sql_query('select * from "Backlog Analysis";', conn)
 
